@@ -16,6 +16,7 @@ import hudson.util.FormValidation;
 import jenkins.tasks.SimpleBuildStep;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
@@ -37,6 +38,9 @@ import org.kohsuke.stapler.StaplerRequest;
  * @author Kohsuke Kawaguchi
  */
 public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
+
+    /** Sleep time value. */
+    private long sleepTime;
 
     /** Name to be displayed by the 'Say hello world' build step. */
     private final String name;
@@ -77,6 +81,10 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
         } else {
             listener.getLogger().println("Hello, " + name + "!");
         }
+
+        listener.getLogger().println("Sleeping for: " + sleepTime + " ms.");
+        Thread.sleep(sleepTime);
+        listener.getLogger().println("I have slept for: " + sleepTime + " ms.");
     }
 
     /**
@@ -209,5 +217,24 @@ public class HelloWorldBuilder extends Builder implements SimpleBuildStep {
         void setUseFrench(final boolean value) {
             useFrench = value;
         }
+    }
+
+    /**
+     * Get the sleep time.
+     *
+     * @return sleep time
+     */
+    public final long getSleepTime() {
+        return sleepTime;
+    }
+
+    /**
+     * Set the sleep value.
+     *
+     * @param sleepTime time to sleep
+     */
+    @DataBoundSetter
+    public final void setSleepTime(final long sleepTime) {
+        this.sleepTime = sleepTime;
     }
 }
